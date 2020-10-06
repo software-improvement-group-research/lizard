@@ -91,6 +91,21 @@ class Test_parser_for_Python(unittest.TestCase):
         functions = get_python_function_list(source)
         self.assertEqual(2, len(functions))
 
+    def test_two_simple_python_functions_in_two_classes(self):
+        source = """
+            class A:
+                def foo():
+                    #'
+                    return False
+
+            class B:
+                def bar():
+                     if foo == 'bar':
+                        return True
+                 """
+        functions = get_python_function_list(source)
+        self.assertEqual(2, len(functions))
+        
     def test_parameter_count(self):
         class namespace2:
             def function_with_2_parameters(a, b):
@@ -280,6 +295,10 @@ class Test_parser_for_Python(unittest.TestCase):
 
     def test_docstring_is_not_counted_in_nloc(self):
         self.check_function_info("def f():\n '''block\n '''\n pass", 6, 2, 4)
+
+    def test_docstring_is_not_counted_in_nloc_miroslavs_example(self):
+        self.check_function_info(
+            'def printme1( str ):\n """This prints a passed string into this function"""\n print(str)\n return', 11, 3, 4)
 
     #global complexity
 
